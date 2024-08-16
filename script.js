@@ -11,10 +11,13 @@ const cols = width / pixelSize
 
 const FPS = 1000/60
 
+var grid = []
+
+var isCliking = false
+
 ctx.fillStyle = "#ffffff"
 ctx.strokeStyle = "#ffffff "
 
-var grid = []
 
 function setGrid() {
     for (let row = 0; row < rows; row += 1) {
@@ -37,6 +40,13 @@ function setGrid() {
 }
 
 setGrid()
+
+function clearGrid() {
+    grid.forEach(element => {
+        element.type = "vide"
+    });
+}
+
 
 function drawGrid() {
     ctx.clearRect(0, 0, width, height)
@@ -62,6 +72,33 @@ canvas.addEventListener('click', (e)=>{
     index = y * 60 + x
     grid[index].type = "blanc"
     ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize)
+})
+
+canvas.addEventListener('mousedown' , (e)=>{
+    console.log('mousedown')
+    isCliking = true
+})
+
+canvas.addEventListener('mouseup', (e)=>{
+    console.log('mouseup')
+    isCliking = false
+})
+
+canvas.addEventListener('mousemove', (e) =>{
+    if(isCliking){
+        x = Math.floor(e.offsetX / pixelSize)
+        y = Math.floor(e.offsetY / pixelSize)
+        index = y * 60 + x
+        grid[index].type = "blanc"
+        ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize)
+    }
+})
+
+document.addEventListener('keydown', (e)=>{
+    console.log(e.keyCode)
+    if(e.keyCode == 67){
+        clearGrid()
+    }
 })
 
 function loop(){
